@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import javafx.geometry.*?>
+<?import java.lang.*?>
+<?import java.net.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.control.cell.*?>
+<?import javafx.scene.layout.*?>
+<?import org.controlsfx.control.*?>
+<?import de.jensd.fx.glyphs.materialdesignicons.*?>
+
+<AnchorPane id="AnchorPane" fx:id="anchorPane" prefHeight="335.0" prefWidth="793.0" style="-fx-font-family:Arial;-fx-font-size:20px;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.CRUDClienteController">
+    
+    <children>
+        <VBox prefHeight="129.0" prefWidth="679.0" spacing="10.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <children>
+                <HBox>
+                    <children>
+                        <VBox prefHeight="47.0" prefWidth="275.0" spacing="5.0">
+                            <children>
+                                <Label text="Nome">
+                           <font>
+                              <Font name="Arial" size="20.0" />
+                           </font></Label>
+                                <TextField fx:id="txtFldNome" prefWidth="70.0" style="-fx-font-family: Arial; -fx-font-size: 20px;" />
+                            </children>
+                            <HBox.margin>
+                                <Insets left="5.0" />
+                            </HBox.margin>
+                        </VBox>
+                        <VBox spacing="5.0">
+                            <children>
+                                <Label text="Sobrenome">
+                           <font>
+                              <Font name="Arial" size="20.0" />
+                           </font></Label>
+                                <TextField fx:id="txtFldSobrenome" prefHeight="25.0" prefWidth="392.0" style="-fx-font-family: Arial; -fx-font-size: 20px;" />
+                            </children>
+                            <HBox.margin>
+                                <Insets left="5.0" right="5.0" />
+                            </HBox.margin>
+                        </VBox>
+                    </children>
+                </HBox>
+                <HBox>
+                    <children>
+                        <VBox>
+                            <children>
+                                <Label text="Documento(CPF/RG)">
+                           <font>
+                              <Font name="Arial" size="20.0" />
+                           </font></Label>
+                        <Label text="(Somente números)" />
+                                <TextField fx:id="txtFldDocumento" prefHeight="25.0" prefWidth="330.0" style="-fx-font-family: Arial; -fx-font-size: 20px;" />
+                            </children>
+                        </VBox>
+                    </children>
+               <VBox.margin>
+                  <Insets left="5.0" />
+               </VBox.margin>
+                </HBox>
+            <HBox alignment="BOTTOM_RIGHT" spacing="10.0">
+               <children>
+                        <Button mnemonicParsing="false" onAction="#btnCancelaClick" text="Cancela">
+                            <graphic>
+                                <MaterialDesignIconView glyphName="CLOSE" />
+                            </graphic>
+                     <font>
+                        <Font name="Arial" size="20.0" />
+                     </font>
+                        </Button>
+                        <Button fx:id="btnConfirma" mnemonicParsing="false" onAction="#btnConfirmaClick" text="Confirma">
+                            <graphic>
+                                <MaterialDesignIconView glyphName="CHECK" />
+                            </graphic>
+                     <font>
+                        <Font name="Arial" size="20.0" />
+                     </font>
+                        </Button>
+               </children>
+            </HBox>
+            </children>
+            <opaqueInsets>
+                <Insets />
+            </opaqueInsets>
+            <padding>
+                <Insets bottom="50.0" left="50.0" right="50.0" top="50.0" />
+            </padding>
+        </VBox>
+    </children>
+</AnchorPane>

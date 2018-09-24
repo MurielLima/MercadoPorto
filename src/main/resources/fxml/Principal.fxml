@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import javafx.geometry.*?>
+<?import java.lang.*?>
+<?import java.net.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.control.cell.*?>
+<?import javafx.scene.layout.*?>
+<?import de.jensd.fx.glyphs.materialdesignicons.*?>
+
+<AnchorPane id="AnchorPane" fx:id="anchorPane" prefHeight="768.0" prefWidth="1300.0" style="-fx-font-family:Arial;-fx-font-size:20px;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.PrincipalController">
+
+    <children>
+        <VBox prefHeight="400.0" prefWidth="1920.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <children>
+                <HBox alignment="BOTTOM_CENTER">
+                    <children>
+                        <Label text="Supermercado Porto">
+                            <font>
+                                <Font name="Arial Bold" size="27.0" />
+                            </font>
+                            <HBox.margin>
+                                <Insets />
+                            </HBox.margin>
+                        </Label>
+                    </children>
+                    <VBox.margin>
+                        <Insets bottom="10.0" top="30.0" />
+                    </VBox.margin>
+                </HBox>
+                <HBox spacing="10.0">
+                    <children>
+                        <MaterialDesignIconView fx:id="btnIncluir" glyphName="PLUS" onMouseClicked="#acIncluir" size="2.5em" />
+                        <MaterialDesignIconView fx:id="btnAlterar" glyphName="PENCIL" onMouseClicked="#acAlterar" size="2.5em" />
+                        <Label text="Pesquisar Cliente: ">
+                            <font>
+                                <Font name="Arial" size="20.0" />
+                            </font>
+                        </Label>             
+                        <TextField fx:id="txtFldPesquisar" onKeyPressed="#acPesquisar" prefHeight="25.0" prefWidth="393.0" style="-fx-font-size: 20px;">
+                            <HBox.margin>
+                                <Insets left="10.0" />
+                            </HBox.margin>
+                            <font>
+                                <Font size="16.0" />
+                            </font>
+                        </TextField>
+                        <MaterialDesignIconView fx:id="btnPesquisar" glyphName="MAGNIFY" onMouseClicked="#acPesquisar" size="2.5em" />
+                        <MaterialDesignIconView fx:id="btnLimpar" glyphName="BROOM" onMouseClicked="#acLimpar" size="2.5em" />
+                        <MaterialDesignIconView fx:id="btnRefresh" glyphName="REFRESH" onMouseClicked="#acLimpar" size="2.5em" />
+                    </children>
+                    <VBox.margin>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                    </VBox.margin>
+                    <padding>
+                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                    </padding>    
+                </HBox>
+                <TableView fx:id="tblViewClientes" onMouseClicked="#tblViewClientesClick" style="-fx-font-size: 24px;">
+                    <columns>
+                        <TableColumn prefWidth="149.0" style="-fx-font-size: 18px; -fx-font-family: Arial;" text="Documento">
+                            <cellValueFactory>
+                                <PropertyValueFactory property="documento" />
+                            </cellValueFactory>
+                        </TableColumn>
+                        <TableColumn maxWidth="824.0" prefWidth="394.0" style="-fx-font-size: 18px; -fx-font-family: Arial;" text="Nome">
+                            <cellValueFactory>
+                                <PropertyValueFactory property="nome" />
+                            </cellValueFactory>
+                        </TableColumn>                        
+                        <TableColumn maxWidth="1233.0" prefWidth="475.0" style="-fx-font-size: 18px; -fx-font-family: Arial;" text="Sobrenome">
+                            <cellValueFactory>
+                                <PropertyValueFactory property="sobrenome" />
+                            </cellValueFactory>
+                        </TableColumn>     
+                        <TableColumn maxWidth="1104.0" minWidth="0.0" prefWidth="149.0" style="-fx-alignment: TOP-CENTER; -fx-font-size: 18px; -fx-font-family: Arial;" text="Qtde contas">
+                            <cellValueFactory>
+                                <PropertyValueFactory property="qtdeContas" />
+                            </cellValueFactory>
+                        </TableColumn>
+                    </columns>
+                    <contextMenu>
+                        <ContextMenu>
+                            <items>
+                                <MenuItem fx:id="mnContas" mnemonicParsing="false" onAction="#acContas" text="Ver Contas">
+                                    <graphic>
+                                        <MaterialDesignIconView glyphName="EYE" size="1.5em" />
+                                    </graphic>
+                                </MenuItem>
+                                <MenuItem fx:id="mnIncluir" mnemonicParsing="false" onAction="#acIncluir" text="Incluir">
+                                    <graphic>
+                                        <MaterialDesignIconView glyphName="PLUS" size="1.5em" />
+                                    </graphic>
+                                </MenuItem>
+                                <MenuItem fx:id="mnAlterar" mnemonicParsing="false" onAction="#acAlterar" text="Alterar">
+                                    <graphic>
+                                        <MaterialDesignIconView glyphName="PENCIL" size="1.5em" />
+                                    </graphic>
+                                </MenuItem>
+                            </items>
+                        </ContextMenu>
+                    </contextMenu>
+                </TableView>
+            </children>
+        </VBox>
+        <MenuBar prefHeight="25.0" prefWidth="1920.0" style="-fx-font-size: 14px;">
+            <menus>
+                <Menu mnemonicParsing="false" text="File">
+                    <items>
+                        <MenuItem mnemonicParsing="false" text="Close" />
+                    </items>
+                </Menu>
+                <Menu mnemonicParsing="false" text="Edit">
+                    <items>
+                        <MenuItem mnemonicParsing="false" text="Delete" />
+                    </items>
+                </Menu>
+                <Menu mnemonicParsing="false" text="Help">
+                    <items>
+                        <MenuItem mnemonicParsing="false" text="About" />
+                    </items>
+                </Menu>
+            </menus>
+        </MenuBar>
+    </children>
+
+</AnchorPane>
