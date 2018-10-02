@@ -120,11 +120,6 @@
                         <MenuItem fx:id="mnExcluir" onAction="#acExcluir" text="_Excluir" />
                     </items>
                 </Menu>
-                <Menu text="_Ajuda">
-                    <items>
-                        <MenuItem onAction="#btnSobreClick" text="_Sobre" />
-                    </items>
-                </Menu>
             </menus>
         </MenuBar>
     </children>
