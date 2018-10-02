@@ -10,8 +10,9 @@ import static config.Config.EXCLUIR;
 import static config.Config.INCLUIR;
 import static config.Config.nf;
 import static config.Config.separadorDecimal;
-import static config.DAO.clienteRepository;
 import static config.DAO.contaRepository;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.net.URL;
 import java.text.ParseException;
 import java.time.LocalDate;
@@ -22,6 +23,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
@@ -35,7 +37,6 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import model.Conta;
-import org.springframework.data.domain.Sort;
 
 /**
  * FXML Controller class
@@ -75,6 +76,10 @@ public class ContaController implements Initializable {
     @FXML
     private Button btnPagar;
 
+    /**
+     * Instancia um objeto do tipo Conta com todos os valores recuperados da
+     * interface Limpa os campos Observação e Valor da interface Adicionar Conta
+     */
     @FXML
     private void btnAdicionarClick() {
         try {
@@ -87,11 +92,23 @@ public class ContaController implements Initializable {
         salvar();
     }
 
+    /**
+     * Deixa visivel o StackPane reponsavel pelo pagamento da conta Recebe os
+     * valores da interface e verifica se o valor é > 0 && menor == ao valor da
+     * conta Se o valor for menor que o da conta, ele seta para conta o valor da
+     * conta subtraido do valor pago Se o valor for == ao valor da conta, ele
+     * exclui a conta do banco de dados Se o valor não estiver dentro do range
+     * [0,valor] ele retorna um Alert com 'erro de pagamento inconsistente'
+     * Limpa os campos da interface e Deixa invisivel o StackPane devolvendo a
+     * visibilidade ao AdicionarConta Retorna Alert de ParseException com a
+     * informação de erro para verificar se alguma operação não foi possivel
+     */
     @FXML
     private void btnPagarClick() {
         conta = tblViewContas.getSelectionModel().getSelectedItem();
         try {
-            if (nf.parse(txtFldPago.getText()).doubleValue() == (conta.getValor())) {
+//            if((new BigDecimal(nf.parse(txtFldPago.getText()).doubleValue()).setScale(2, RoundingMode.HALF_EVEN)).compareTo(BigDecimal.ZERO) > 0)
+            if (nf.parse(txtFldPago.getText()).doubleValue() == (conta.getValor().doubleValue())) {
                 acao = EXCLUIR;
                 stackPane.setVisible(false);
                 vbox.setVisible(true);
@@ -100,8 +117,12 @@ public class ContaController implements Initializable {
                 txtFldObservacaoStack.clear();
                 lblValor.setText("");
                 salvar();
-            } else if (nf.parse(txtFldPago.getText()).doubleValue() > 0 && nf.parse(txtFldPago.getText()).doubleValue() <= conta.getValor()) {
-                conta.setValor(conta.getValor() - nf.parse(txtFldPago.getText()).doubleValue());
+            } else if ((new BigDecimal(nf.parse(txtFldPago.getText()).doubleValue()).setScale(2, RoundingMode.HALF_EVEN)).compareTo(BigDecimal.ZERO) > 0
+                    && ((new BigDecimal(nf.parse(txtFldPago.getText()).doubleValue()).setScale(2, RoundingMode.HALF_EVEN)).compareTo(conta.getValor()) < 0)
+                    || (new BigDecimal(nf.parse(txtFldPago.getText()).doubleValue()).setScale(2, RoundingMode.HALF_EVEN)).compareTo(conta.getValor()) == 0) {
+//            } else if (nf.parse(txtFldPago.getText()) > 0 && nf.parse(txtFldPago.getText()) <= conta.getValor()) {
+
+                conta.setValor(conta.getValor().subtract((new BigDecimal(nf.parse(txtFldPago.getText()).doubleValue()).setScale(2, RoundingMode.HALF_EVEN))).setScale(2, RoundingMode.HALF_EVEN).doubleValue());
                 conta.setObservacao(txtFldObservacaoStack.getText());
                 acao = ALTERAR;
                 stackPane.setVisible(false);
@@ -128,6 +149,12 @@ public class ContaController implements Initializable {
         }
     }
 
+    /**
+     * Reponsavel por INSERIR,ALTERAR,EXCLUIR contas do banco de dados Retorna
+     * um Alert da Exception caso a conexão com o banco de dados tenha sido
+     * perdida ou algo tenha dado errado Retorna um Alert da Exception caso a
+     * tenha dado erro de chave duplicada
+     */
     private void salvar() {
         try {
             switch (acao) {
@@ -142,11 +169,24 @@ public class ContaController implements Initializable {
                     break;
             }
             tblViewContas.refresh();
-            tblViewContas.setItems(
-                    FXCollections.observableList(contaRepository.findByIdCliente(controllerPai.cliente)));
-            controllerPai.tblViewClientes.refresh();
-            controllerPai.tblViewClientes.setItems(
-                    FXCollections.observableList(clienteRepository.findAll(new Sort(new Sort.Order("nome")))));
+            try {
+
+                tblViewContas.setItems(
+                        FXCollections.observableList(contaRepository.findByIdCliente(controllerPai.cliente)));
+            } catch (Exception e) {
+                Alert alert;
+                alert = new Alert(Alert.AlertType.ERROR, "Desculpe, ocorreu um erro ao conectar com o banco, \r\n"
+                        + "Verique se o serviço do Banco de Dados MongoDB está ativo e se o IP está correto.", ButtonType.CLOSE);
+                alert.setTitle("Erro na Conexão com o Banco de Dados");
+                alert.setHeaderText("Conexão");
+                alert.showAndWait();
+                System.out.println("Erro na conexão com o banco");
+                btnFecharClick();
+            }
+
+//            controllerPai.tblViewClientes.refresh();
+//            controllerPai.tblViewClientes.setItems(
+//                    FXCollections.observableList(clienteRepository.findAll(new Sort(new Sort.Order("nome")))));
         } catch (Exception e) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Erro");
@@ -160,6 +200,10 @@ public class ContaController implements Initializable {
         }
     }
 
+    /**
+     * Insere os valores da conta do banco de dados nos campos da interface
+     * StackPane
+     */
     private void mostraConta() {
         stackPane.setVisible(true);
         vbox.setVisible(false);
@@ -169,25 +213,51 @@ public class ContaController implements Initializable {
         txtFldObservacaoStack.setText(conta.getObservacao());
     }
 
+    /**
+     * Mostra a interface para adicionar Nova Conta e deixa invisivel a
+     * interface Pagar conta
+     */
     @FXML
     private void btnNovaContaClick() {
         stackPane.setVisible(false);
         vbox.setVisible(true);
     }
 
+    /**
+     * Fecha a janela e retorna para a janela controllerPai
+     */
     @FXML
     public void btnFecharClick() {
         anchorPane.getScene().getWindow().hide();
         controllerPai.tblViewClientes.requestFocus();
-        controllerPai.tblViewClientes.refresh();
+//        controllerPai.tblViewClientes.refresh();
 //        controllerPai.tblViewClientes.setItems(
 //                    FXCollections.observableList(clienteRepository.findAll(new Sort(new Sort.Order("nome")))));
     }
 
+    /**
+     * Executado pela classe PrincipalController, setCadastroControler cria um
+     * node entre a controllerPai e this classe
+     *
+     * @param controllerPai
+     */
     public void setCadastroController(PrincipalController controllerPai) {
         this.controllerPai = controllerPai;
-        tblViewContas.setItems(
-                FXCollections.observableList(contaRepository.findByIdCliente(controllerPai.cliente)));
+        try {
+
+            tblViewContas.setItems(
+                    FXCollections.observableList(contaRepository.findByIdCliente(controllerPai.cliente)));
+        } catch (Exception e) {
+            Alert alert;
+            alert = new Alert(Alert.AlertType.ERROR, "Desculpe, ocorreu um erro ao conectar com o banco, \r\n"
+                    + "Verique se o serviço do Banco de Dados MongoDB está ativo e se o IP está correto.", ButtonType.CLOSE);
+            alert.setTitle("Erro na Conexão com o Banco de Dados");
+            alert.setHeaderText("Conexão");
+            alert.showAndWait();
+            System.out.println("Erro na conexão com o banco");
+            btnFecharClick();
+        }
+
         lblNome.setText(controllerPai.cliente.getNome() + " " + controllerPai.cliente.getSobrenome());
         lblDocumento.setText(controllerPai.cliente.getDocumento());
         stackPane.setVisible(false);
@@ -195,6 +265,11 @@ public class ContaController implements Initializable {
         txtFldValor.requestFocus();
     }
 
+    /**
+     * Evento ao dar dois cliques em uma linha da TableView
+     *
+     * @param event
+     */
     @FXML
     private void tblViewContasClick(Event event) {
         MouseEvent me = null;
@@ -207,13 +282,15 @@ public class ContaController implements Initializable {
     }
 
     /**
-     * Initializes the controller class.
+     * Initializes the controller class. Desabilita e habilita o botao adicionar
+     * e Pagar quando todos os dados estiverem preenchidos Adiciona eventos de
+     * teclas ENTER,ESCAPE,F1,F2,F3,F4
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         btnAdicionar.disableProperty().bind(txtFldValor.textProperty().isEmpty().or(txtFldObservacao.textProperty().isEmpty()));
         btnPagar.disableProperty().bind(txtFldPago.textProperty().isEmpty());
-        
+
         tblViewContas.setOnKeyPressed((KeyEvent k) -> {
             final KeyCombination ESCAPE = new KeyCodeCombination(KeyCode.ESCAPE);
             final KeyCombination ENTER = new KeyCodeCombination(KeyCode.ENTER);

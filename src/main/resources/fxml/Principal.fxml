@@ -14,7 +14,7 @@
 <AnchorPane id="AnchorPane" fx:id="anchorPane" prefHeight="768.0" prefWidth="1300.0" style="-fx-font-family:Arial;-fx-font-size:20px;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.PrincipalController">
 
     <children>
-        <VBox prefHeight="400.0" prefWidth="1920.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+        <VBox fx:id="vboxContent" prefHeight="400.0" prefWidth="1920.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
             <children>
                 <HBox alignment="BOTTOM_CENTER">
                     <children>
@@ -108,19 +108,21 @@
         </VBox>
         <MenuBar prefHeight="25.0" prefWidth="1920.0" style="-fx-font-size: 14px;">
             <menus>
-                <Menu mnemonicParsing="false" text="File">
+                <Menu text="_Arquivo">
                     <items>
-                        <MenuItem mnemonicParsing="false" text="Close" />
+                        <MenuItem fx:id="mnPesquisar" onAction="#acPesquisar" text="_Pesquisar" />
                     </items>
                 </Menu>
-                <Menu mnemonicParsing="false" text="Edit">
+                <Menu text="_Editar">
                     <items>
-                        <MenuItem mnemonicParsing="false" text="Delete" />
+                        <MenuItem onAction="#acIncluir" text="_Adicionar" />
+                        <MenuItem fx:id="mnAlterarPagar" onAction="#acAlterar" text="_Alterar/_Pagar" />
+                        <MenuItem fx:id="mnExcluir" onAction="#acExcluir" text="_Excluir" />
                     </items>
                 </Menu>
-                <Menu mnemonicParsing="false" text="Help">
+                <Menu text="_Ajuda">
                     <items>
-                        <MenuItem mnemonicParsing="false" text="About" />
+                        <MenuItem onAction="#btnSobreClick" text="_Sobre" />
                     </items>
                 </Menu>
             </menus>

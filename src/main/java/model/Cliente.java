@@ -14,17 +14,27 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 /**
  *
- * @author Muriel
+ * @author Muriel Classe do tipo entidade do banco MONGODB Responsavél por
+ * armazenar os dados de cada cliente
  */
-
 @Document
 public class Cliente {
 
+    /**
+     * @var id : reponsavel pela identificação da classe, do tipo chave primária
+     * @var nome: reponsavel por armazenar nome do cliente
+     * @var sobrenome: responsavel por armazenar sobrenome.\r\n Existem dois
+     * campos para nome e sobrenome por questões de ser obrigatorio o sobrenome
+     * @var documento: um numero de documento que não foi previamente
+     * especificado
+     * @var dataCadastro: responsável por armazenar a data de cadastro de cada
+     * cliente
+     */
     @Id
     private String id;
     private String nome;
     private String sobrenome;
-    @Indexed(unique=true)
+    @Indexed(unique = true)
     private String documento;
     private LocalDate dataCadastro;
 
@@ -88,9 +98,18 @@ public class Cliente {
     public void setDataCadastro(LocalDate dataCadastro) {
         this.dataCadastro = dataCadastro;
     }
-    public int getQtdeContas(){
+
+    /**
+     *
+     * @return Quantidade de contas cadastradas para o this.nome cliente
+     */
+    public int getQtdeContas() {
         return contaRepository.countByIdCliente(this);
     }
+
+    /*
+    * @return : Gera um id unico para a classe
+     */
     @Override
     public int hashCode() {
         int hash = 7;
@@ -98,6 +117,11 @@ public class Cliente {
         return hash;
     }
 
+    /**
+     *
+     * @param obj
+     * @return compara classe this == other
+     */
     @Override
     public boolean equals(Object obj) {
         if (this == obj) {
@@ -118,7 +142,7 @@ public class Cliente {
 
     @Override
     public String toString() {
-        return nome + sobrenome;
+        return nome + " " + sobrenome;
     }
 
 }

@@ -149,9 +149,9 @@
                             </padding>
                         </HBox>
                     </children>
-               <VBox.margin>
-                  <Insets top="110.0" />
-               </VBox.margin>
+                    <VBox.margin>
+                        <Insets top="110.0" />
+                    </VBox.margin>
                 </VBox>
             </children>
         </VBox>
@@ -185,23 +185,23 @@
                                 </VBox>
                             </children>
                         </HBox>
-                  <HBox prefHeight="100.0" prefWidth="200.0">
-                     <children>
-                        <Label text="Observação: ">
-                           <font>
-                              <Font name="Arial" size="24.0" />
-                           </font>
-                        </Label>
-                        <TextField fx:id="txtFldObservacaoStack" alignment="CENTER_LEFT">
-                           <font>
-                              <Font name="Arial" size="28.0" />
-                           </font>
-                        </TextField>
-                     </children>
-                     <VBox.margin>
-                        <Insets top="10.0" />
-                     </VBox.margin>
-                  </HBox>
+                        <HBox prefHeight="100.0" prefWidth="200.0">
+                            <children>
+                                <Label text="Observação: ">
+                                    <font>
+                                        <Font name="Arial" size="24.0" />
+                                    </font>
+                                </Label>
+                                <TextField fx:id="txtFldObservacaoStack" alignment="CENTER_LEFT">
+                                    <font>
+                                        <Font name="Arial" size="28.0" />
+                                    </font>
+                                </TextField>
+                            </children>
+                            <VBox.margin>
+                                <Insets top="10.0" />
+                            </VBox.margin>
+                        </HBox>
                         <HBox alignment="BOTTOM_RIGHT" prefHeight="100.0" prefWidth="200.0">
                             <children>
                                 <Button fx:id="btnPagar" mnemonicParsing="false" onAction="#btnPagarClick" text="(F2)Pagar">
@@ -217,15 +217,15 @@
                                 <Insets top="25.0" />
                             </VBox.margin>
                         </HBox>
-                  <HBox alignment="BOTTOM_RIGHT" prefHeight="100.0" prefWidth="200.0">
-                     <children>
-                        <Button mnemonicParsing="false" onAction="#btnNovaContaClick" text="(F3)Nova Conta">
-                           <font>
-                              <Font name="Arial" size="18.0" />
-                           </font>
-                        </Button>
-                     </children>
-                  </HBox>
+                        <HBox alignment="BOTTOM_RIGHT" prefHeight="100.0" prefWidth="200.0">
+                            <children>
+                                <Button mnemonicParsing="false" onAction="#btnNovaContaClick" text="(F3)Nova Conta">
+                                    <font>
+                                        <Font name="Arial" size="18.0" />
+                                    </font>
+                                </Button>
+                            </children>
+                        </HBox>
                     </children>
                     <StackPane.margin>
                         <Insets top="90.0" />

@@ -1,7 +1,7 @@
 package view;
 
-import com.mongodb.MongoException;
 import static config.Config.ALTERAR;
+import static config.Config.EXCLUIR;
 import static config.Config.INCLUIR;
 import static config.DAO.clienteRepository;
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView;
@@ -16,6 +16,8 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.Hyperlink;
+import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
@@ -24,6 +26,8 @@ import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
 import javafx.scene.input.MouseEvent;
 import static javafx.scene.input.MouseEvent.MOUSE_CLICKED;
+import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import model.Cliente;
 import org.springframework.data.domain.Sort;
 import utility.XPopOver;
@@ -38,6 +42,12 @@ public class PrincipalController implements Initializable {
     private TextField txtFldPesquisar;
     @FXML
     private MenuItem mnAlterar;
+    @FXML
+    private MenuItem mnAlterarPagar;
+    @FXML
+    private MenuItem mnPesquisar;
+    @FXML
+    private MenuItem mnExcluir;
     @FXML
     private MenuItem mnContas;
     @FXML
@@ -59,6 +69,16 @@ public class PrincipalController implements Initializable {
         showCRUD();
     }
 
+    @FXML
+    private void acExcluir() {
+        acao = EXCLUIR;
+        cliente = tblViewClientes.getSelectionModel().getSelectedItem();
+        showCRUD();
+    }
+
+    /**
+     * Mostra a janela modal CRUDCLiente
+     */
     private void showCRUD() {
         String cena = "/fxml/CRUDCliente.fxml";
         XPopOver popOver = null;
@@ -70,11 +90,18 @@ public class PrincipalController implements Initializable {
             case ALTERAR:
                 popOver = new XPopOver(cena, "Alteração de Cliente", null);
                 break;
+            case EXCLUIR:
+                popOver = new XPopOver(cena, "Exclusão de Cliente", null);
+                break;
         }
         CRUDClienteController controllerFilho = popOver.getLoader().getController();
         controllerFilho.setCadastroController(this);
     }
 
+    /**
+     * Inicia a janela modal para alteração de contas do cliente selecionado na
+     * TableView
+     */
     @FXML
     private void acContas() {
         cliente = tblViewClientes.getSelectionModel().getSelectedItem();
@@ -83,13 +110,34 @@ public class PrincipalController implements Initializable {
         controllerFilho.setCadastroController(this);
     }
 
+    /**
+     * Pesquisa um cliente, por nome,Sobrenome,Documento Retorna Allert da
+     * ExceptionInInitializerError caso ocorra perda de conexão com o banco
+     */
     @FXML
     private void acPesquisar() {
         tblViewClientes.refresh();
-        tblViewClientes.setItems(FXCollections.observableList(
-                clienteRepository.findByNomeLikeIgnoreCaseOrSobrenomeLikeIgnoreCaseOrDocumentoLikeIgnoreCase(txtFldPesquisar.getText(), txtFldPesquisar.getText(), txtFldPesquisar.getText())));
+        try {
+
+            tblViewClientes.setItems(FXCollections.observableList(
+                    clienteRepository.findByNomeLikeIgnoreCaseOrSobrenomeLikeIgnoreCaseOrDocumentoLikeIgnoreCase(txtFldPesquisar.getText(), txtFldPesquisar.getText(), txtFldPesquisar.getText())));
+        } catch (ExceptionInInitializerError e) {
+            Alert alert;
+            alert = new Alert(Alert.AlertType.ERROR, "Desculpe, ocorreu um erro ao conectar com o banco, \r\n"
+                    + "Verique se o serviço do Banco de Dados MongoDB está ativo e se o IP está correto.", ButtonType.CLOSE);
+            alert.setTitle("Erro na Conexão com o Banco de Dados");
+            alert.setHeaderText("Conexão");
+            alert.showAndWait();
+            System.out.println("Erro na conexão com o banco");
+            System.exit(0);
+        }
+
     }
 
+    /**
+     * /**
+     * Limpa o txtFldPesquisar
+     */
     @FXML
     private void acLimpar() {
         txtFldPesquisar.clear();
@@ -97,6 +145,11 @@ public class PrincipalController implements Initializable {
 //                FXCollections.observableList(clienteRepository.findAll(new Sort(new Sort.Order("nome")))));
     }
 
+    /**
+     * Evento ao dar dois cliques em uma linha da TableView
+     *
+     * @param event
+     */
     @FXML
     private void tblViewClientesClick(Event event) {
         MouseEvent me = null;
@@ -108,6 +161,12 @@ public class PrincipalController implements Initializable {
         }
     }
 
+    /**
+     * Initializes the controller class. Desabilita e habilita o botao
+     * Alterar,mnAlterar,mnContas,btnPesquisar quando todos os dados estiverem
+     * preenchidos Adiciona eventos de teclas ENTER,ESCAPE,F1,F2,F3,F4 apenas
+     * números
+     */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         List<Cliente> lstCli = new ArrayList<>();
@@ -116,8 +175,8 @@ public class PrincipalController implements Initializable {
             lstCli = clienteRepository.findAll(new Sort(new Sort.Order("nome")));
         } catch (ExceptionInInitializerError e) {
             Alert alert;
-            alert = new Alert(Alert.AlertType.ERROR,"Desculpe, ocorreu um erro ao conectar com o banco, \r\n"
-                    + "Verique se o serviço do Banco de Dados MongoDB está ativo e se o IP está correto.",ButtonType.CLOSE);
+            alert = new Alert(Alert.AlertType.ERROR, "Desculpe, ocorreu um erro ao conectar com o banco, \r\n"
+                    + "Verique se o serviço do Banco de Dados MongoDB está ativo e se o IP está correto.", ButtonType.CLOSE);
             alert.setTitle("Erro na Conexão com o Banco de Dados");
             alert.setHeaderText("Conexão");
             alert.showAndWait();
@@ -129,9 +188,11 @@ public class PrincipalController implements Initializable {
         btnAlterar.visibleProperty().bind(
                 Bindings.isEmpty((tblViewClientes.getSelectionModel().getSelectedItems())).not());
         mnAlterar.visibleProperty().bind(btnAlterar.visibleProperty());
+        mnExcluir.visibleProperty().bind(btnAlterar.visibleProperty());
         mnContas.visibleProperty().bind(btnAlterar.visibleProperty());
+        mnAlterarPagar.visibleProperty().bind(btnAlterar.visibleProperty());
         btnPesquisar.disableProperty().bind(txtFldPesquisar.textProperty().isEmpty());
-
+        mnPesquisar.disableProperty().bind(btnPesquisar.disableProperty());
         txtFldPesquisar.setOnKeyPressed(k -> {
             final KeyCombination F4 = new KeyCodeCombination(KeyCode.F4);
             final KeyCombination F1 = new KeyCodeCombination(KeyCode.F1);
@@ -141,7 +202,7 @@ public class PrincipalController implements Initializable {
                 tblViewClientes.requestFocus();
             } else if (F1.match(k)) {
                 acIncluir();
-            } else if (ENTER.match(k)) {
+            } else if (ENTER.match(k) && !txtFldPesquisar.getText().isEmpty()) {
                 acPesquisar();
             } else if (F5.match(k)) {
                 acLimpar();

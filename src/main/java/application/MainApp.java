@@ -1,6 +1,5 @@
 package application;
 
-import static config.DAO.clienteRepository;
 import javafx.application.Application;
 import static javafx.application.Application.launch;
 import javafx.fxml.FXMLLoader;
@@ -10,7 +9,6 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
-import org.springframework.data.domain.Sort;
 
 public class MainApp extends Application {
 
@@ -24,7 +22,9 @@ public class MainApp extends Application {
 
         stage.setTitle("Caderneta Débito - Supermercado Porto");
         stage.setScene(scene);
+        stage.setMaximized(true);
         stage.show();
+
         scene.getWindow().setOnCloseRequest((WindowEvent ev) -> {
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION,
                     "Deseja realmente sair do sistema?",

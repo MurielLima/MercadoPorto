@@ -13,7 +13,6 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.stage.Modality;
-import static javafx.stage.Modality.APPLICATION_MODAL;
 import javafx.stage.Stage;
 import org.controlsfx.control.PopOver;
 
@@ -43,14 +42,14 @@ public class XPopOver {
             loader.setLocation(getClass().getResource(arquivoFXML));
             loader.setResources(i18n);
             if (node == null) {
-                Scene scene =   new Scene(loader.load());
-                Stage stage =new Stage();
+                Scene scene = new Scene(loader.load());
+                Stage stage = new Stage();
                 stage.setScene(scene);
                 stage.setTitle(titulo);
                 stage.setResizable(false);
                 stage.initModality(Modality.APPLICATION_MODAL);
                 stage.show();
-            }else{
+            } else {
                 PopOver popOver = new PopOver();
                 popOver.setContentNode(loader.load());
                 popOver.setAutoFix(true);

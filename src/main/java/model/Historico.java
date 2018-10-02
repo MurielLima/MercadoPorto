@@ -14,6 +14,8 @@ import org.springframework.data.mongodb.core.mapping.Document;
 /**
  *
  * @author Muriel
+ * Classe do tipo Entidade do banco MONGODB
+ * Responsável por armazenar um log de todas as vezes que o valor é alterado
  */
 @Document
 public class Historico {
@@ -22,7 +24,6 @@ public class Historico {
     private String id;
     @DBRef 
     private Cliente idCliente;
-    
     private String mensagem;
 
     public Historico(Cliente idCliente, String mensagem) {

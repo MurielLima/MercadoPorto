@@ -6,15 +6,8 @@
 package utility;
 
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.File;
 import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-
-
 
 /**
  *
@@ -25,12 +18,12 @@ public class Dados {
     private BufferedReader br = null;
     private String nomeArq;
     private String Linha;
-    
 
     public Dados(String nomeArq) {
         int i, j;
         this.nomeArq = nomeArq;
     }
+
     public String ler() {
         String linha = null;
 
@@ -51,5 +44,5 @@ public class Dados {
 
         return linha;
     }
-   
+
 }
