@@ -21,7 +21,6 @@ public class DBConfig extends AbstractMongoConfiguration {
     @Override
     public Mongo mongo() throws Exception {
         Dados dados = new Dados("C:\\config.txt");
-        System.out.println("-----"+dados.ler());
         MongoClient client = new MongoClient(dados.ler(), 27017);
 
         return client;
