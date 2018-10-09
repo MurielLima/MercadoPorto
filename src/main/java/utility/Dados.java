@@ -20,13 +20,11 @@ public class Dados {
     private String Linha;
 
     public Dados(String nomeArq) {
-        int i, j;
         this.nomeArq = nomeArq;
     }
 
     public String ler() {
         String linha = null;
-
         try {
             br = new BufferedReader(new FileReader(nomeArq));
             while ((linha = br.readLine()) != null) {
@@ -41,8 +39,7 @@ public class Dados {
             } catch (IOException ex) {
             }
         }
-
-        return linha;
+        return Linha;
     }
 
 }

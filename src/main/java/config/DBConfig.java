@@ -12,7 +12,7 @@ import utility.Dados;
 @EnableMongoRepositories(basePackageClasses = ClienteRepository.class)
 
 public class DBConfig extends AbstractMongoConfiguration {
-
+    
     @Override
     protected String getDatabaseName() {
         return "mercado";
@@ -20,10 +20,9 @@ public class DBConfig extends AbstractMongoConfiguration {
 
     @Override
     public Mongo mongo() throws Exception {
-        Dados dados = new Dados("config.txt");
-
-        MongoClient client;
-        client = new MongoClient(dados.ler(), 27017);
+        Dados dados = new Dados("C:\\config.txt");
+        System.out.println("-----"+dados.ler());
+        MongoClient client = new MongoClient(dados.ler(), 27017);
 
         return client;
 
