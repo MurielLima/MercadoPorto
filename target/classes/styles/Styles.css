@@ -1,0 +1,12 @@
+.button {
+    -fx-font-weight: bold;
+}
+.aprovado{
+    -fx-mid-text-color:green;
+}
+.reprovado{
+    -fx-mid-text-color:red;
+}
+.reprovadoPorFalta{
+    -fx-mid-text-color:blue;
+}
